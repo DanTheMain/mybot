@@ -39,6 +39,20 @@ def print_constallation(update, context):
         constellation = ephem.constellation(ephem.Neptune(date))
     update.message.reply_text(f"Planet: {planet_name.capitalize()}, date: {date}, constellation: {constellation}")
 
+def count_words(update, context):
+    user_text = update.message.text.replace('/wordcount', '')
+    user_text_stripped = user_text.strip('!?-_,.:;\'"/[]{}|@#$%^&*()=+<>~`').strip() # via regex is better
+    reply = 0
+    if not user_text_stripped:
+        reply = "Введите фразу из хотя бы одного слова!"
+    elif user_text_stripped.replace(' ', '').isnumeric():
+        reply = f"{user_text} - не фраза!"
+    else:
+        reply = len(user_text_stripped.split(' '))
+    print(f'Word count for {user_text} is {reply}')
+    update.message.reply_text(reply)
+
+
 def main():
 
     mybot = Updater(settings.API_KEY, use_context=True, request_kwargs=PROXY)
@@ -46,10 +60,9 @@ def main():
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
     dp.add_handler(CommandHandler("planet", print_constallation))
+    dp.add_handler(CommandHandler("wordcount", count_words))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     logging.info("Бот стартовал")
-
-
     mybot.start_polling()
     mybot.idle()
 
