@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+import re
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import settings
@@ -41,7 +42,7 @@ def print_constallation(update, context):
 
 def count_words(update, context):
     user_text = update.message.text.replace('/wordcount', '')
-    user_text_stripped = user_text.strip('!?-_,.:;\'"/[]{}|@#$%^&*()=+<>~`').strip() # via regex is better
+    user_text_stripped = re.sub('[!?-_,.:;\'"/\[\]{}|@#$%^&*()=+<>~`]', ' ', user_text).strip()
     reply = 0
     if not user_text_stripped:
         reply = "Введите фразу из хотя бы одного слова!"
