@@ -42,7 +42,8 @@ def print_constallation(update, context):
 
 def count_words(update, context):
     user_text = update.message.text.replace('/wordcount', '')
-    user_text_stripped = re.sub('[!?-_,.:;\'"/\[\]{}|@#$%^&*()=+<>~`]', ' ', user_text).strip()
+    user_text_cleaned = re.sub('[!?-_,.:;\'"/\[\]{}|@#$%^&*()=+<>~`]', ' ', user_text)
+    user_text_stripped = re.sub(' +',' ',user_text_cleaned).strip()
     reply = 0
     if not user_text_stripped:
         reply = "Введите фразу из хотя бы одного слова!"
